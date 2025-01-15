@@ -2,6 +2,7 @@ package com.phgama.dscatalog.services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.phgama.dscatalog.dto.CategoryDTO;
 import com.phgama.dscatalog.entities.Category;
 import com.phgama.dscatalog.repositories.CategoryRepository;
+import com.phgama.dscatalog.services.exceptions.EntityNotFoundException;
 
 @Service
 public class CategoryService {
@@ -29,6 +31,14 @@ public class CategoryService {
 			listDto.add(new CategoryDTO(cat));
 		}
 		*/
+	}
+
+	@Transactional(readOnly = true)
+	public CategoryDTO findById(Long id) {
+		Optional<Category> obj = repository.findById(id);
+		Category entity = obj.orElseThrow(() -> new EntityNotFoundException("Não achamos!"));
+		return new CategoryDTO(entity);
+		
 	}
 	
 	
