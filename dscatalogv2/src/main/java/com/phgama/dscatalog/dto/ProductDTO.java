@@ -1,56 +1,56 @@
-package com.phgama.dscatalog.entities;
+package com.phgama.dscatalog.dto;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.Table;
+import com.phgama.dscatalog.entities.Category;
+import com.phgama.dscatalog.entities.Product;
 
-@Entity
-@Table(name = "tb_product")
-public class Product implements Serializable{
+public class ProductDTO implements Serializable{
 	private static final long serialVersionUID = 1L;
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private Long id;
 	private String name;
-	
-	@Column(columnDefinition = "TEXT")
 	private String description;
 	private Double price;
 	private String imgUrl;
-	
-	@Column(columnDefinition = "TIMESTAMP WITHOUT TIME ZONE")
 	private Instant date;
 	
-	@ManyToMany
-	@JoinTable(name = "tb_product_category",
-		joinColumns = @JoinColumn(name = "product_id"),
-		inverseJoinColumns = @JoinColumn(name = "category_id"))
-	Set<Category> categories;
+	private List<CategoryDTO> categories = new ArrayList<>();
 	
-	public Product() {
+
+	public ProductDTO() {
 		
 	}
 
-	public Product(Long id, String name, String description, Double price, String imgUrl, Instant date) {
-		
+
+	public ProductDTO(Long id, String name, String description, Double price, String imgUrl, Instant date) {
+		super();
 		this.id = id;
 		this.name = name;
 		this.description = description;
 		this.price = price;
 		this.imgUrl = imgUrl;
 		this.date = date;
+	}
+	
+	
+	public ProductDTO(Product entity) {
+		this.id = entity.getId();
+		this.name = entity.getName();
+		this.description = entity.getDescription();
+		this.price = entity.getPrice();
+		this.imgUrl = entity.getImgUrl();
+		this.date = entity.getDate();
+	}
+	
+	public ProductDTO(Product entity, Set<Category> categories) {
+		this(entity);
+		categories.forEach(cat -> this.categories.add(new CategoryDTO(cat)));
+		
 	}
 
 
@@ -114,11 +114,15 @@ public class Product implements Serializable{
 	}
 
 
-	public Set<Category> getCategories() {
+	public List<CategoryDTO> getCategories() {
 		return categories;
 	}
 
 
-		
+	public void setCategories(List<CategoryDTO> categories) {
+		this.categories = categories;
+	}
+	
+	
 	
 }

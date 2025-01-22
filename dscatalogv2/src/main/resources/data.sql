@@ -1,3 +1,27 @@
+CREATE TABLE tb_category (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    created_At TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE tb_product (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    date TIMESTAMP WITH TIME ZONE NOT NULL,
+    description TEXT,
+    img_url VARCHAR(255)
+);
+
+CREATE TABLE tb_product_category (
+    product_id BIGINT NOT NULL,
+    category_id BIGINT NOT NULL,
+    PRIMARY KEY (product_id, category_id),
+    FOREIGN KEY (product_id) REFERENCES tb_product(id),
+    FOREIGN KEY (category_id) REFERENCES tb_category(id)
+);
+
+    
 INSERT INTO tb_category (name, created_At) VALUES ('Livros', NOW());
 INSERT INTO tb_category (name, created_At) VALUES ('Eletrônicos', NOW());
 INSERT INTO tb_category (name, created_At) VALUES ('Computadores', NOW());
