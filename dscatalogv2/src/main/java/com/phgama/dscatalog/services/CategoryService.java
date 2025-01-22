@@ -1,7 +1,6 @@
 package com.phgama.dscatalog.services;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -62,11 +61,10 @@ public class CategoryService {
 			entity = repository.save(entity);
 			return new CategoryDTO(entity);
 		}
-		catch(EntityNotFoundException e){
-				throw new ResourceNotFoundException("Nao achamos o id" + id);
-			}
-		
-		}
+		catch (EntityNotFoundException e) {
+			throw new ResourceNotFoundException("Id not found " + id);
+		}		
+	}
 
 	
 	public void delete(Long id) {
